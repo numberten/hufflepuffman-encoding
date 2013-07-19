@@ -7,7 +7,7 @@ Pretty much huffman encoding. Not the best huffman encoding, but not terrible hu
 *"You might belong in typeclass Hufflepuff,  
 Where they are Just $ and loyal,  
 Those patient\* Hufflepuffs are True,  
-And [unafraid, of, toil]"*  
-—The QuickSorting Hat  
+And \[unafraid, of, toil]"*  
+\—The QuickSorting Hat  
 
 \*lazy
