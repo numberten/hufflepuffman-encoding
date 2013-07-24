@@ -1,10 +1,12 @@
 module Huffman.Encode (
     encode
+,   toBinary
 ,   BTree (..)
 )   where
 
 import qualified Data.PSQueue as PQ
 import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Lazy.Char8 as BLC
 import Data.List
 import Data.Map as M hiding (foldl')
 import Data.Maybe
@@ -33,8 +35,18 @@ encode xs = (binary_encoding, huffmantree)
         binary_encoding = BL.pack
                         . fmap readBits 
                         $ chunks padded_encoding
-        
-        
+
+-- | Encodes the BTree and its length into the header of the file.
+toBinary :: (Ord a, Show a) => [a] -> BL.ByteString
+toBinary xs = BL.append header bytestring
+    where
+        (bytestring,btree)  = encode xs
+        tree_length         = show
+                            . length
+                            $ show btree
+        tree_encoding       = show btree
+        header              = BLC.pack
+                            $ tree_length ++ tree_encoding
 
 makeQueue :: (Eq a, Ord a) => [a] -> PQ.PSQ (BTree a) Int
 makeQueue xs = foldl' f PQ.empty xs

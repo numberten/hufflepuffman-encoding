@@ -4,7 +4,9 @@ module Huffman.Decode (
 
 import Huffman.Encode (BTree (..))
 import qualified Data.ByteString.Lazy as BL
-import Data.Word8
+import qualified Data.ByteString.Lazy.Char8 as BLC
+import Data.Char
+import Data.Word8 hiding (isDigit)
 
 decode :: BL.ByteString -> BTree a -> [a]
 decode bytes btree  = readEncoding encoded_bits btree
@@ -13,6 +15,22 @@ decode bytes btree  = readEncoding encoded_bits btree
         encoded_bits    = removePadding
                         . concat
                         $ map word8_to_bits unpacked_bytes
+
+fromBinary :: (Read a) => BL.ByteString -> [a]
+fromBinary byte_string  = decode encoding btree
+    where
+        tree_length = read 
+                    . BLC.unpack
+                    . BLC.takeWhile isDigit
+                    $ byte_string
+        btree       = read
+                    . BLC.unpack
+                    . BLC.take tree_length
+                    . BLC.dropWhile isDigit
+                    $ byte_string
+        encoding    = BL.drop tree_length
+                    . BLC.dropWhile isDigit
+                    $ byte_string
 
 -- | Read a list of bits and convert them into values using a given BTree.
 readEncoding :: [Word8] -> BTree a -> [a]
