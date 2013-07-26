@@ -1,9 +1,0 @@
-red blue
-yellow and green
-those are four of my favorite things!
-
-
-00000000 11111111 xxxxxXXX
-00000000 11111111 00xxxXXX
-00000000 111111xx xxxxxXXX
-
