@@ -1,5 +1,6 @@
 module Huffman.Decode (
     decode
+,   fromBinary
 )   where
 
 import Huffman.Encode (BTree (..))
@@ -16,6 +17,8 @@ decode bytes btree  = readEncoding encoded_bits btree
                         . concat
                         $ map word8_to_bits unpacked_bytes
 
+-- | Decodes a ByteString that has been encoded with both
+-- | a header and padding.
 fromBinary :: (Read a) => BL.ByteString -> [a]
 fromBinary byte_string  = decode encoding btree
     where

@@ -1,13 +1,27 @@
-import Data.Binary.Put
-import qualified Data.ByteString.Lazy as BL1
-import qualified Data.ByteString.Lazy.Char8 as BL2
+import qualified Data.ByteString.Lazy as BL
+import System.Environment
 
 import Huffman.Encode
 import Huffman.Decode
 
-main = do
-        putStrLn ("Length of string being encoded: " ++ (show $ length s))
-        putStrLn . uncurry decode $ encode s
-    where
-        s = concat $ replicate 100 "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+main :: IO ()
+main = getArgs >>= runArgs
 
+runArgs :: [String] -> IO ()
+runArgs (action:filepath:newfile:[])
+            | action == "encode"
+            = do
+                file <- readFile filepath
+                BL.writeFile newfile $ toBinary file
+            | action == "decode"
+            = do
+                binary <- BL.readFile filepath
+                writeFile newfile $ fromBinary binary
+            | otherwise
+            = error error_msg
+runArgs _   = error error_msg
+error_msg = "Invalid command line arguments.\n\
+             \(encode|decode) \
+             \<file_to_be_encoded/decoded> \
+             \<new_file_name>"
+                                      
