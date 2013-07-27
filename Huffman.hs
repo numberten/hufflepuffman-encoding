@@ -18,9 +18,9 @@ runArgs (action:filepath:newfile:[])
                 binary <- BL.readFile filepath
                 writeFile newfile $ fromBinary binary
             | otherwise
-            = error error_msg
-runArgs _   = error error_msg
-error_msg = "Invalid command line arguments.\n\
+            = error errorMsg
+runArgs _   = error errorMsg
+errorMsg = "Invalid command line arguments.\n\
              \(encode|decode) \
              \<file_to_be_encoded/decoded> \
              \<new_file_name>"
